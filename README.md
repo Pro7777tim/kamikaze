@@ -7,3 +7,5 @@ The game consists of 3 types of colorful layers.
 If the player touches the green ball he gets a point, but if the player touches the red he dies!
 Control is done with the help of arrows, and the stop button is the space bar.
 The player wins when he gets 100 points...
+![Images](20240710_122332.png)
+![Images](20240710_122452.png)
