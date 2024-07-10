@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Камікадзе</title>
+</head>
+<body>
+  <h1 id="score">Score: 0</h1>
+  <canvas id="canvas" width="800" height="800"></canvas>
+    <style>
+  #score {
+  left: 1000px;
+  top: 20px;
+  position: absolute;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-2.1.0.js"></script>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    var getRandomNumber = function (number) {
+      return Math.floor(Math.random() * number);
+    }
+
+    var circle = function (x, y, radius, fillCircle, color) {
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+      if (fillCircle) {
+        ctx.fillStyle = color;
+        ctx.fill();
+      } else {
+        ctx.stroke();
+      }
+    }
+
+    var Ball = function () {
+      this.x = 400;
+      this.y = 400;
+      this.xSpeed = 5;
+      this.ySpeed = 0;
+      this.color = "Blue";
+    }
+
+    var ball = new Ball();
+    var obstacleMassif = [];
+    var pointMassif = [];
+    var collected = 0;
+
+    var PointObject = function () {
+      this.x = getRandomNumber(800);
+      this.y = getRandomNumber(800);
+      this.collected = false;
+      this.color = "LimeGreen";
+    }
+
+    var ObstacleObject = function () {
+      this.x = getRandomNumber(800);
+      this.y = getRandomNumber(800);
+      this.color = "Red";
+    }
+
+    var defineDistance = function (target) {
+    var diffX = ball.x - target.x;
+    var diffY = ball.y - target.y;
+    return Math.sqrt((diffX * diffX) + (diffY * diffY));
+    };
+
+    Ball.prototype.draw = function () {
+      circle(this.x, this.y, 8, true, this.color);
+    }
+
+    PointObject.prototype.draw = function () {
+      circle(this.x, this.y, 8, true, this.color);
+    }
+
+    PointObject.prototype.checkCollected = function () {
+    var distance = defineDistance(this);
+    if (distance < 15 && this.collected == false) {
+    collected++;
+    this.collected = true;
+    $("#score").text("Score: " + collected);
+    }
+    }
+
+    ObstacleObject.prototype.checkCollision = function () {
+    var distance = defineDistance(this);
+    if (distance < 15) {
+    if (distance < 15 && true) {
+    alert("You lost! Better luck later...");
+    location.reload();
+    }
+    }
+    }
+
+    ObstacleObject.prototype.draw = function () {
+      circle(this.x, this.y, 8, true, this.color);
+    }
+
+    Ball.prototype.move = function () {
+      this.x += this.xSpeed;
+      this.y += this.ySpeed;
+
+      if (this.x < 0) {
+        this.x = 800;
+      } else if (this.x > 800) {
+        this.x = 0;
+      }
+      if (this.y < 0) {
+        this.y = 800;
+      } else if (this.y > 800) {
+        this.y = 0;
+      }
+    }
+
+    $("html").keydown(function(event){
+      if (event.keyCode === 38) {
+        ball.xSpeed = 0;
+        ball.ySpeed = -5;
+      } else if (event.keyCode === 40) {
+        ball.xSpeed = 0;
+        ball.ySpeed = 5;
+      } else if (event.keyCode === 37) {
+        ball.xSpeed = -5;
+        ball.ySpeed = 0;
+      } else if (event.keyCode === 39) {
+        ball.xSpeed = 5;
+        ball.ySpeed = 0;
+      } else if (event.keyCode === 32) {
+        ball.xSpeed = 0;
+        ball.ySpeed = 0;
+      }
+    })
+
+    setInterval(function () {
+      ctx.clearRect(0, 0, 800, 800);
+
+      ball.draw();
+      ball.move();
+
+      for (var i = 0; i < pointMassif.length; i++) {
+        if (pointMassif[i].collected == false) {pointMassif[i].draw();
+        pointMassif[i].checkCollected();}
+      }
+
+      for (var i = 0; i < obstacleMassif.length; i++) {
+        obstacleMassif[i].draw();
+        obstacleMassif[i].checkCollision();
+      }
+
+      if (collected === 100) {
+      if (collected === 100 && true) {
+      alert("You won! It was difficult...");
+      location.reload();
+      }
+      }
+
+      ctx.strokeRect(1, 1, 799, 799);
+    }, 30);
+
+    setInterval(function () {
+      pointMassif.push(new PointObject());
+    }, 5000);
+
+    setInterval(function () {
+      obstacleMassif.push(new ObstacleObject());
+    }, 15000);
+  </script>
+</body>
+</html>
+
+
